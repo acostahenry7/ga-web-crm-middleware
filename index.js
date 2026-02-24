@@ -9,8 +9,15 @@ const { generateUrlParams } = require("./utils");
 const axios = require("axios");
 
 // Define the paths to your certificate files
-const privateKey = fs.readFileSync("./_grupoavant_com_do.key", "utf8");
-const certificate = fs.readFileSync("./_grupoavant_com_do.crt", "utf8");
+
+const privateKey = fs.readFileSync(
+  `${__dirname}/_grupoavant_com_do.key`,
+  "utf8",
+);
+const certificate = fs.readFileSync(
+  `${__dirname}/_grupoavant_com_do.crt`,
+  "utf8",
+);
 // Optional: Include a certificate authority chain file if your CA provides one
 // const ca = fs.readFileSync('path/to/your/ca.pem', 'utf8');
 
@@ -36,8 +43,10 @@ router.post("/", async (req, res) => {
 
 const httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(3001, () => {
-  console.log("HTTPS Server running on port 3001");
+httpsServer.listen(process.env.CRM_MIDDLEWARE_PORT || 3001, () => {
+  console.log(
+    `HTTPS Server running on port ${process.env.CRM_MIDDLEWARE_PORT || 3001}`,
+  );
 });
 
 async function postData(leads) {
